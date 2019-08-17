@@ -2,7 +2,7 @@
 
 GDocker is the easiest way to run Ghost in Docker from trusted sources and strong steering control on  setup.
 
-Features**
+Features
 ---
 
 1. Ghost 2.X.
@@ -19,7 +19,7 @@ Features**
 1. Just Copy your ssl files in `Nginx/nginx/certs/`
 
     ```bash
-├── README
+	├── README
     ├── cert.pem
     ├── chain.pem
     ├── fullchain.pem
@@ -44,7 +44,7 @@ Features**
 
    `docker-compose up -d --force-recreate`
 
-Donations**
+Donations
 ---
 
 This is free, open-source software. If you'd like to support the development of future projects, or say thanks for this one, Give this Repo ★★★ & ♥♥♥.

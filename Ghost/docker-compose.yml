@@ -1,0 +1,17 @@
+version: '3.5'
+
+services:
+  ghost:
+    image: ghost:0.1
+    container_name: Ghost
+    ports:
+      - 2368:2368
+    volumes:
+      - ${Code_Dir}/ghost/casper:/var/lib/ghost/versions/2.28.0/content/themes/casper
+      - ${Code_Dir}/config.development.json:/var/lib/ghost/config.development.json:z
+    environment:
+       NODE_ENV: development
+       server__host: 0.0.0.0
+       url: "https://rvsharma.com"
+    restart: always
+    network_mode: web-app

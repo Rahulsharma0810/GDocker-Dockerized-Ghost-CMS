@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  nginx:
+    image: nginx:mainline
+    container_name: Nginx
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./nginx:/etc/nginx:ro
+      - ./logs:/var/log/nginx #This will mount vhost logs to logs/
+    ports:
+      - 80:80
+      - 443:443
+    network_mode: web-app

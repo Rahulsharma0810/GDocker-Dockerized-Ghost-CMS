@@ -1,0 +1,82 @@
+# map of content type -> expires header
+map $sent_http_content_type $expires {
+    default                    off;
+    text/html                  epoch;
+    text/css                   max;
+    application/javascript     max;
+    ~image/                    max;
+}
+
+# listen for BS traffic on 80 that lacks a hostname, and just serve
+# the "welcome to NGINX" page
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+
+    root /user/share/nginx/html;
+}
+
+# listen on 80, and 301 all traffic to https
+# allow .well-known on 80 though, for Let's Encrypt checks
+server {
+    listen [::]:80;
+    listen 80;
+    server_name tld.com www.tld.com;
+
+    root /var/www/ghost/;
+    location ~ /.well-known {
+        allow all;
+        break;
+    }
+
+    location / {
+        return 301 https://tld.com$request_uri;
+    }
+}
+
+# listen on 443, and forward all www traffic to non-www
+server {
+    listen [::]:443 ssl http2;
+    listen 443 ssl http2;
+    server_name www.rvsharma.com;
+
+    location / {
+        return 301 https://tld.com$request_uri;
+    }
+}
+
+# what we're actually listening on
+server {
+
+    # allow ssl and http2 traffic
+    listen [::]:443 ssl http2 default_server;
+    listen 443 ssl http2 default_server;
+
+    # our server name is our hostname
+    server_name tld.com;
+
+    access_log /var/log/nginx/tld.com.access.log;
+    error_log /var/log/nginx/tld.com.error.log;
+    ssl_certificate    /etc/nginx/certs/tld.com/fullchain.pem;
+    ssl_certificate_key    /etc/nginx/certs/tld.com/privkey.pem;
+
+    # add expires headers for static content
+    expires $expires;
+
+    # proxy all of our traffic to Ghost
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header HOST $http_host;
+        proxy_set_header X-NginX-Proxy true;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        proxy_pass http://Ghost:2368; #This is Docker Container Name you need to start Ghost first
+        proxy_redirect off;
+    }
+
+    # allow Let's Encrypt checks on .well-known without proxying
+    location ~ /.well-known {
+        allow all;
+    }
+}

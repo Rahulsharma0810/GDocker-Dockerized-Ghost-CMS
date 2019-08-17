@@ -1,0 +1,13 @@
+version: '3.5'
+
+services:
+  db:
+    container_name: Mariadb
+    image: mariadb
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    volumes:
+      - ${Data_Dir}/Mariadb/mysql:/var/lib/mysql
+      - ${Data_Dir}/Mariadb/conf:/etc/mysql/conf.d
+    network_mode: web-app

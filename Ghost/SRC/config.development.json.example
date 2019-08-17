@@ -1,0 +1,55 @@
+{
+  "url": "http://tld.com:2368/",
+  "server": {
+    "port": 2368
+  },
+  "storage": {
+  "active": "s3",
+  "s3": {
+    "accessKeyId": "",
+    "secretAccessKey": "",
+    "region": "",
+    "bucket": ""
+    }
+  },
+  "database": {
+    "client": "mysql",
+    "connection": {
+      "host": "",
+      "port": 3306,
+      "user": "",
+      "password": "",
+      "database": ""
+    }
+  },
+  "mail": {
+    "transport": "SMTP",
+    "from": "",
+    "options": {
+      "service": "Gmail",
+      "host": "smtp.gmail.com",
+      "port": 465,
+      "secureConnection": true,
+      "auth": {
+        "user": "",
+        "pass": ""
+      }
+    }
+  },
+  "paths": {
+         "contentPath": "content/"
+  },
+  "privacy": {
+    "useRpcPing": false,
+    "useUpdateCheck": true
+  },
+  "useMinFiles": false,
+  "caching": {
+    "theme": {
+      "maxAge": 0
+    },
+    "admin": {
+      "maxAge": 0
+    }
+  }
+}
